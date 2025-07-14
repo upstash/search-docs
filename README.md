@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Description
+
+A modern documentation library to search and track the docs.
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How it Works
+- Search: Uses Upstash Search UI to query multiple indexes in parallel, sorts and groups results, and displays them with section headers.
+- Recent Updates: Upstash Qstash fetches all documents from multiple indexes in batches, filters for those crawled in the last 24 hours.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Set the Crawler
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Import the crawler function and call it with the required credentials
+- Deploy this functionality to vercel and call it using Qstash Schedule
+providing the index name and the url of the docs in the body.
+- It will crawl and upsert the data to Upstash Search on schedule.
 
-## Learn More
+```
+import { crawlAndIndex } from "@upstash/search-crawler"
 
-To learn more about Next.js, take a look at the following resources:
+export async function crawlDocumentation(request) {
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    result = await crawlAndIndex({
+      upstashUrl,
+      upstashToken,
+      indexName: request.indexName,
+      docUrl: request.docsUrl,
+    })
+}
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
 
-## Deploy on Vercel
+## Conclusion
+Finally, the UI will make use of these components to serve users to find whatever they want from 
+any source they want. Moreover, they can keep up with the updates in their favorite docs.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
