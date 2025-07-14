@@ -27,7 +27,7 @@ interface SearchResult {
 }
 
 async function getLatestDocs(): Promise<SearchResult[]> {
-  try {
+  try {  
     const indexes = await client.listIndexes()
     
     const currentDate = new Date()
@@ -96,7 +96,7 @@ export default function RecentUpdates() {
       setLoadingLatest(false)
     }
 
-    loadLatestDocs()
+    loadingLatest && loadLatestDocs()
   }, [latestDocs])
 
   // Format date for display

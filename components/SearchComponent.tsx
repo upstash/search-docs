@@ -27,8 +27,8 @@ interface SearchResult {
   indexName?: string
 }
 
-function createSearchFunction() {
-  return async function searchDocs(query: string): Promise<SearchResult[]> {
+
+  async function searchDocs(query: string): Promise<SearchResult[]> {
     if (!query.trim()) return []
 
     try {
@@ -71,7 +71,7 @@ function createSearchFunction() {
       return []
     }
   }
-}
+
 
 export default function SearchComponent() {
 
@@ -85,7 +85,7 @@ export default function SearchComponent() {
           <SearchBar.DialogContent>
             <SearchBar.Input placeholder="Type to search documentation..." />
             <SearchBar.Results
-              searchFn={createSearchFunction()}
+              searchFn={searchDocs}
             >
               {(result) => (
                 <SearchBar.Result value={result.id} key={result.id}>
