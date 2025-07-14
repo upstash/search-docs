@@ -27,12 +27,13 @@ import { crawlAndIndex } from "@upstash/search-crawler"
 
 export async function crawlDocumentation(request) {
 
-    result = await crawlAndIndex({
+    const result = await crawlAndIndex({
       upstashUrl,
       upstashToken,
       indexName: request.indexName,
       docUrl: request.docsUrl,
     })
+    return result;
 }
 
 ```
