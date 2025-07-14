@@ -1,3 +1,5 @@
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fupstash%2Fsearch-docs&env=NEXT_PUBLIC_UPSTASH_SEARCH_URL,NEXT_PUBLIC_UPSTASH_SEARCH_TOKEN&envDescription=Credentials%20needed%20for%20Upstash%20Search%20Component%20use&envLink=https%3A%2F%2Fconsole.upstash.com%2Fsearch&project-name=search-docs&repository-name=search-docs&demo-title=Documentation%20Library&demo-description=Search%20across%20all%20your%20documentation%20sources%20and%20discover%20the%20latest%20updates&demo-url=https%3A%2F%2Fsearch-docs.vercel.app%2F)
+
 ## Description
 
 A modern documentation library to search and track the docs.
@@ -17,25 +19,15 @@ npm run dev
 
 ## Set the Crawler
 
-- Import the crawler function and call it with the required credentials
-- Deploy this functionality to vercel and call it using Qstash Schedule
-providing the index name and the url of the docs in the body.
-- It will crawl and upsert the data to Upstash Search on schedule.
+- Upstash Qstash can call this endpoint: `/api/crawl` on schedule to crawl the relevant data
+- Providing the URL and the index name in the body, you may manage the crawler,
+e.g.
 
 ```
-import { crawlAndIndex } from "@upstash/search-crawler"
-
-export async function crawlDocumentation(request) {
-
-    const result = await crawlAndIndex({
-      upstashUrl,
-      upstashToken,
-      indexName: request.indexName,
-      docUrl: request.docsUrl,
-    })
-    return result;
+{
+    "docsUrl": "https://nextjs.org/docs",
+    "index": "next-js"
 }
-
 ```
 
 ## Conclusion
