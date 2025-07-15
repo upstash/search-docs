@@ -31,7 +31,7 @@ async function getLatestDocs(): Promise<SearchResult[]> {
     const indexes = await client.listIndexes()
     
     const currentDate = new Date()
-    currentDate.setDate(currentDate.getDate() - 1)
+    currentDate.setDate(currentDate.getDate() - 7)
     const oneDayAgo = currentDate.getTime()
     
     const rangePromises = indexes.map(async (indexName) => {
@@ -60,13 +60,13 @@ async function getLatestDocs(): Promise<SearchResult[]> {
           
           recentDocuments = recentDocuments.concat(recentBatch)
 
-          if (!results.nextCursor || results.nextCursor === cursor) {
+          if (!results.nextCursor || results.nextCursor === cursor || recentDocuments.length >= 10) {
             break
           }
           cursor = results.nextCursor
         }
         
-        return recentDocuments.length < 100 ? recentDocuments : []
+        return recentDocuments.slice(0, 10)
       } catch (error) {
         console.error(`Error getting documents from ${indexName}:`, error)
         return []
@@ -99,7 +99,6 @@ export default function RecentUpdates() {
     loadingLatest && loadLatestDocs()
   }, [latestDocs])
 
-  // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -155,7 +154,7 @@ export default function RecentUpdates() {
               {latestDocs.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-8 text-center">
                   <FileText className="w-12 h-12 text-gray-300 mb-2" />
-                  <p className="text-sm text-gray-500">No recent updates found</p>
+                  <p className="text-sm text-gray-500">No recent updates in the last week</p>
                 </div>
               )}
             </div>
